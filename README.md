@@ -11,3 +11,4 @@ All my school projects in one place
 
 # Java
 - JFrame paint clone application
+- JFrame class register
