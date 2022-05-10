@@ -4,6 +4,7 @@ All my school projects in one place
 # C++
 - Hashtable
 - Heapsort
+- RK4/RK5
 
 # C#
 - My Testing-App huge project on "IO"
