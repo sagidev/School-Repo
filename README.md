@@ -4,6 +4,7 @@ All my school projects in one place
 # C++
 - Hashtable
 - Heapsort
+- MST
 - RK4/RK5
 
 # C#
