@@ -2,11 +2,13 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <random>
 
 int main()
 {
     std::srand(std::time(NULL));
-    float randmax = RAND_MAX * 1.0;    
+    float randmax = RAND_MAX * 1.0;  
+    std::mt19937 GEN(time(nullptr));
     //float B = 1.5, C = 40;
     //int count = 0;
     //int missed = 0;
@@ -33,6 +35,9 @@ int main()
     //} while (count < 2000);
     //d.close();
 
+
+
+    //1
     std::cout << "boxa" << std::endl;
     float mi = 5;
     float sigma = 10;
@@ -49,6 +54,7 @@ int main()
         float z2 = R * cos(Theta);
 
         float x = z2 * sigma + mi;
+        d << x << "\n";
         std::cout << x << std::endl;
         count1++;
     } while (count1 < 2000);
@@ -56,7 +62,7 @@ int main()
     std::cout << std::endl << std::endl << count1 << "2 " << std::endl;
     
     
-    
+    //2
     int count2 = 0;
     do
     {
@@ -70,7 +76,6 @@ int main()
 
         float sigma1 = sqrt(1. / 12.);
         
-        
         float y = ((1. / 6.) * xii - mi1) / (sigma1 / sqrt(6));
         float x = y * sigma + mi;
         std::cout << x << std::endl;
@@ -83,7 +88,7 @@ int main()
     d << z1 << "\n";*/
     //std::cout << count1 << ":  " << x << std::endl;
 
-
+    std::normal_distribution<> dodatkowa_drzemka(80., 20);
 
     //std::cout << "\nODWROCONA DYSTRYBUANTA" << std::endl;
     //int count1 = 0;
