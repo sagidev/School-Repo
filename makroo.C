@@ -19,7 +19,7 @@ void makroo()
     }
     d.close();
     // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedział
-    TH1F* hi1 = new TH1F("hi1", "nazwa histogramu", 40, -1.6, 0);
+    TH1F* hi1 = new TH1F("hi1", "nazwa histogramu", 40, -50, 50);
     // wypelnianie histogramu jednowymiarowego
     for (i = 0; i < 2000; i++)
     {
@@ -51,8 +51,8 @@ void makroo()
 
     //definicja funkcji do modelowania
      // f4 wlasna funkcja, w nawisach kwadratowych nieznane parametry, ktorych szuka program po uruchomieniu fit jesli modelowanie jedna funkcja to jak w przypadku f4
-    TF1* f4 = new TF1("f4", "[0]*exp(-x*[1])", -0, 400);
-    hi1->Fit("pol4");
+    TF1* f4 = new TF1("f4", "[0]*exp(-x*[1])", -10, 10);
+    hi1->Fit("gaus");
     /*
         //f1,f2,f3 jesli modelowanie kawalkami ( ostatnie liczby to zakresy )
    TF1* f1 = new TF1("f1","expo",0,19);
