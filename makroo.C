@@ -13,21 +13,21 @@ void makroo()
 
     // pod windows pelna sciezka z podwojnymi \	\
   //   d.open("D:\\Users\\moje\\dane.txt");
-    for (i = 0; i < 2000; i++)
+    for (i = 0; i < n; i++)
     {
         d >> x1[i];
     }
     d.close();
-    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedzia≈Ç
-    TH1F* hi1 = new TH1F("hi1", "nazwa histogramu", 40, -50, 50);
+    // deklarowanie histogramu "jednowymiarowego"  .... liczba klas, przedzia≥
+    TH1F* hi1 = new TH1F("hi1", "histogram", 40, -0.5, 39.5);
     // wypelnianie histogramu jednowymiarowego
-    for (i = 0; i < 2000; i++)
+    for (i = 0; i < n; i++)
     {
         hi1->Fill(x1[i]);
     }
 
     /*
-    // deklarowanie histogramu "dwuwymiarowego"  .... liczba klas, przedzia≈Ç najpierw po zmiennej x, potem po zmiennej y
+    // deklarowanie histogramu "dwuwymiarowego"  .... liczba klas, przedzia≥ najpierw po zmiennej x, potem po zmiennej y
    TH2F *imd2 = new TH2F("imd2","jestem histogramem-2wym ",40,-5.,400.,20,-5,400.);
 
        // wypelnianie histogramu dwuwymiarowego
@@ -52,7 +52,7 @@ void makroo()
     //definicja funkcji do modelowania
      // f4 wlasna funkcja, w nawisach kwadratowych nieznane parametry, ktorych szuka program po uruchomieniu fit jesli modelowanie jedna funkcja to jak w przypadku f4
     TF1* f4 = new TF1("f4", "[0]*exp(-x*[1])", -10, 10);
-    hi1->Fit("gaus");
+    //hi1->Fit(f4);
     /*
         //f1,f2,f3 jesli modelowanie kawalkami ( ostatnie liczby to zakresy )
    TF1* f1 = new TF1("f1","expo",0,19);
