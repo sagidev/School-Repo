@@ -1,0 +1,52 @@
+FUNCTION_BLOCK tipper
+
+VAR_INPUT
+	predkosc : REAL;
+        widocznosc : REAL;
+END_VAR
+
+VAR_OUTPUT
+        wypadek : REAL;
+END_VAR
+
+
+FUZZIFY predkosc
+        TERM mala :=  (10.0, 1.0) (30.0, 1.0) (50.0, 0.0) ;
+        TERM srednio :=  (40.0, 0.0) (60.0, 1.0) (80.0, 1.0)(100.0, 0.0) ;
+        TERM szybko :=  (80.0, 0.0) (120.0, 1.0) (160.0, 1.0) (180.0, 0.0) ;
+        TERM bardzoszybko :=  (160.0, 0.0) (180.0, 1.0)(200.0, 1.0) ;
+END_FUZZIFY
+
+FUZZIFY widocznosc
+        TERM bardzoslaba :=  (0.05, 1.0) (0.5, 1.0) (1.0, 0.0) ;
+        TERM srednia :=  (0.5, 0.0) (1.0, 1.0) (3.0, 1.0)(3.2, 0.0) ;
+        TERM dobra :=  (2.8, 0.0) (3.0, 1.0) (4.0, 1.0);
+END_FUZZIFY
+
+DEFUZZIFY wypadek
+        TERM bardzomale :=  (0.0, 1.0) (0.1, 1.0) (0.2, 0.0);
+        TERM male :=  (0.15, 0.0) (0.3, 1.0) (0.5, 1.0) (0.6, 0.0); 
+        TERM srednie :=  (0.5, 0.0) (0.6, 1.0) (0.7,1.0) (0.8, 0.0); 
+	TERM duze :=  (0.7, 0.0) (0.8, 1.0) (1.0, 1.0) ; 
+        METHOD : COG;
+        DEFAULT := 0.0;
+        RANGE := (0.0 .. 1.0);
+END_DEFUZZIFY
+
+RULEBLOCK No1
+        ACT : MIN;
+        ACCU : MAX;
+        AND : MIN;
+        RULE 1 : IF (predkosc IS mala) AND (widocznosc IS bardzoslaba) THEN wypadek IS bardzomale;
+        RULE 2 : IF (predkosc IS srednio) AND (widocznosc IS srednia) THEN wypadek IS srednie;
+        RULE 3 : IF (predkosc IS szybko) AND (widocznosc IS dobra) THEN wypadek IS srednie;
+        RULE 4 : IF (predkosc IS bardzoszybko) AND (widocznosc IS dobra) THEN wypadek IS srednie;
+        RULE 5: IF (predkosc IS szybko) AND (widocznosc IS srednia) THEN wypadek IS srednie;
+        RULE 6 : IF (predkosc IS szybko) AND (widocznosc IS bardzoslaba) THEN wypadek IS duze;
+        RULE 7 : IF (predkosc IS bardzoszybko) AND (widocznosc IS bardzoslaba) THEN wypadek IS duze;
+        RULE 8 : IF (predkosc IS mala) AND (widocznosc IS dobra) THEN wypadek IS bardzomale;
+        RULE 9 : IF (predkosc IS srednio) AND (widocznosc IS bardzoslaba) THEN wypadek IS srednie;
+        RULE 10 : IF (predkosc IS srednio) AND (widocznosc IS dobra) THEN wypadek IS bardzomale;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

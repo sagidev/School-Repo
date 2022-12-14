@@ -1,0 +1,54 @@
+FUNCTION_BLOCK tipper
+
+VAR_INPUT
+	wilgotnosc : REAL;
+        temperatura : REAL;
+END_VAR
+
+VAR_OUTPUT
+        intensywnosc : REAL;
+END_VAR
+
+
+FUZZIFY wilgotnosc
+        TERM bardzomala := (0.0, 1.0) (15.0, 1.0) (25.0, 0.0) ;
+        TERM mala :=  (15.0, 0.0) (25.0, 1.0) (35.0, 1.0) (45.0, 0.0) ;
+        TERM srednia :=  (40.0, 0.0) (50.0, 1.0) (70.0, 1.0)(80.0, 0.0) ;
+        TERM wysoka :=  (70.0, 0.0) (80.0, 1.0) (100.0, 1.0) ;
+END_FUZZIFY
+
+FUZZIFY temperatura
+        TERM niska :=  (-5.0, 1.0) (0.0, 1.0) (5.0, 0.0) ;
+        TERM srednia :=  (2.0, 0.0) (8.0, 1.0) (16.0, 1.0)(20.0, 0.0) ;
+        TERM wysoka :=  (15.0, 0.0) (20.0, 1.0) (26.0, 1.0) (30.0, 0.0) ;
+        TERM bardzowysoka := (26.0, 0.0) (30.0,1.0) (35.0, 1.0) ;
+END_FUZZIFY
+
+DEFUZZIFY intensywnosc
+        TERM bardzomala := (0.0, 1.0) (15.0, 1.0) (25.0, 0.0) ;
+        TERM mala :=  (15.0, 0.0) (25.0, 1.0) (35.0, 1.0) (45.0, 0.0) ;
+        TERM srednia :=  (40.0, 0.0) (50.0, 1.0) (70.0, 1.0)(80.0, 0.0) ;
+        TERM wysoka :=  (70.0, 0.0) (80.0, 1.0) (100.0, 1.0) ;
+        METHOD : COG;
+        DEFAULT := 0.0;
+        RANGE := (0.0 .. 100.0);
+END_DEFUZZIFY
+
+RULEBLOCK No1
+        ACT : MIN;
+        ACCU : MAX;
+        AND : MIN;
+        RULE 1 : IF (wilgotnosc IS mala) AND (temperatura IS wysoka) THEN intensywnosc IS wysoka;
+        RULE 2 : IF (wilgotnosc IS mala) AND (temperatura IS srednia) THEN intensywnosc IS srednia;
+        RULE 3 : IF (wilgotnosc IS mala) AND (temperatura IS niska) THEN intensywnosc IS srednia;
+        RULE 4 : IF (wilgotnosc IS bardzomala) AND (temperatura IS wysoka) THEN intensywnosc IS wysoka;
+        RULE 5 : IF (wilgotnosc IS bardzomala) AND (temperatura IS srednia) THEN intensywnosc IS wysoka;
+        RULE 6 : IF (wilgotnosc IS srednia) AND (temperatura IS srednia) THEN intensywnosc IS srednia;
+        RULE 7 : IF (wilgotnosc IS srednia) AND (temperatura IS niska) THEN intensywnosc IS mala;
+        RULE 8 : IF (wilgotnosc IS wysoka) AND (temperatura IS niska) THEN intensywnosc IS bardzomala;
+        RULE 9 : IF (wilgotnosc IS wysoka) AND (temperatura IS srednia) THEN intensywnosc IS bardzomala;
+        RULE 10 : IF (wilgotnosc IS wysoka) AND (temperatura IS wysoka) THEN intensywnosc IS srednia;
+        RULE 11 : IF (wilgotnosc IS srednia) AND (temperatura IS wysoka) THEN intensywnosc IS srednia;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

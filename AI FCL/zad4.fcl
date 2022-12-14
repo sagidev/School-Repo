@@ -1,0 +1,60 @@
+FUNCTION_BLOCK tipper
+
+VAR_INPUT
+	wewnatrz : REAL;
+        zewnatrz : REAL;
+END_VAR
+
+VAR_OUTPUT
+        poziom : REAL;
+END_VAR
+
+
+FUZZIFY wewnatrz
+        TERM niska :=  (-10.0, 1.0) (-5.0, 1.0) (0.0, 0.0) ;
+        TERM srednioniska :=  (-5.0, 0.0) (0.0, 1.0) (4.0, 1.0)(8.0, 0.0) ;
+        TERM srednia :=  (0.0, 0.0) (5.0, 0.0) (10.0, 1.0) (15.0, 1.0) (20.0, 0.0) ;
+        TERM sredniowysoka :=  (15.0, 0.0) (20.0, 1.0)(25.0, 1.0) (30.0, 1.0) (35.0, 0.0) ;
+        TERM wysoka :=  (30.0, 0.0)(35.0, 1.0) (40.0, 1.0) (45.0, 1.0) ;
+END_FUZZIFY
+
+FUZZIFY zewnatrz
+        TERM niska :=  (-10.0, 1.0) (-5.0, 1.0) (0.0, 0.0) ;
+        TERM srednioniska :=  (-5.0, 0.0) (0.0, 1.0) (4.0, 1.0)(8.0, 0.0) ;
+        TERM srednia :=  (0.0, 0.0) (5.0, 0.0) (10.0, 1.0) (15.0, 1.0) (20.0, 0.0) ;
+        TERM sredniowysoka :=  (15.0, 0.0) (20.0, 1.0)(25.0, 1.0) (30.0, 1.0) (35.0, 0.0) ;
+        TERM wysoka :=  (30.0, 0.0)(35.0, 1.0) (40.0, 1.0) (45.0, 1.0) ;
+END_FUZZIFY
+
+DEFUZZIFY poziom
+        TERM pierwszy :=  (0.0, 0.0) (1.0, 1.0) (2.0, 0.0); //mocne grzanie
+        TERM drugi :=  (1.0, 0.0) (2.0, 1.0) (3.0, 0.0); //male grzanie
+        TERM trzeci :=  (2.0, 0.0) (3.0, 1.0) (4.0, 0.0); //klima mala
+	TERM czwarty :=  (3.0, 0.0) (4.0, 1.0) (5.0, 0.0) ; //klima srednia
+	TERM piaty :=  (4.0, 0.0) (5.0, 1.0) (6.0, 0.0); //klima duza
+        METHOD : COG;
+        DEFAULT := 0.0;
+        RANGE := (0.0 .. 5.0);
+END_DEFUZZIFY
+
+RULEBLOCK No1
+        ACT : MIN;
+        ACCU : MAX;
+        AND : MIN;
+	RULE 1 : IF (zewnatrz IS niska) AND (wewnatrz IS niska) THEN poziom IS pierwszy;
+        RULE 2 : IF (zewnatrz IS srednioniska) AND (wewnatrz IS niska) THEN poziom IS pierwszy;
+        RULE 3 : IF (zewnatrz IS srednioniska) AND (wewnatrz IS srednioniska) THEN poziom IS drugi;
+        RULE 4 : IF (zewnatrz IS srednioniska) AND (wewnatrz IS srednia) THEN poziom IS drugi;
+        RULE 5 : IF (zewnatrz IS srednia) AND (wewnatrz IS srednia) THEN poziom IS drugi;
+        RULE 6 : IF (zewnatrz IS srednia) AND (wewnatrz IS niska) THEN poziom IS pierwszy;
+        RULE 7 : IF (zewnatrz IS sredniowysoka) AND (wewnatrz IS niska) THEN poziom IS pierwszy;
+        RULE 8 : IF (zewnatrz IS sredniowysoka) AND (wewnatrz IS srednia) THEN poziom IS drugi;
+        RULE 9 : IF (zewnatrz IS wysoka) AND (wewnatrz IS sredniowysoka) THEN poziom IS trzeci;
+        RULE 10 : IF (zewnatrz IS sredniowysoka) AND (wewnatrz IS sredniowysoka) THEN poziom IS czwarty;
+        RULE 11 : IF (zewnatrz IS sredniowysoka) AND (wewnatrz IS wysoka) THEN poziom IS piaty;
+        RULE 12 : IF (zewnatrz IS wysoka) AND (wewnatrz IS srednia) THEN poziom IS czwarty;
+        RULE 13 : IF (zewnatrz IS niska) AND (wewnatrz IS srednia) THEN poziom IS pierwszy;
+        RULE 14 : IF (zewnatrz IS srednioniska) AND (wewnatrz IS sredniowysoka) THEN poziom IS drugi;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

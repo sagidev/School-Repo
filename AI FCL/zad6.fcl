@@ -1,0 +1,42 @@
+FUNCTION_BLOCK tipper
+
+VAR_INPUT
+	dystans : REAL;
+        predkosc : REAL;
+END_VAR
+
+VAR_OUTPUT
+        zmiana : REAL;
+END_VAR
+
+
+FUZZIFY dystans
+        TERM krotki := (0.0, 1.0) (5.0, 1.0) (10.0, 1.0)  (15.0, 0.0) ;
+        TERM dlugi :=  (15.0, 0.0) (20, 1.0) (50.0, 1.0) (100.0, 1.0) ;
+END_FUZZIFY
+
+FUZZIFY predkosc
+        TERM mala :=  (0.0, 1.0) (25.0, 1.0) (40.0, 1.0) (45.0, 0.0) ;
+        TERM duza :=  (45.0, 0.0) (70.0, 1.0) (150.0, 1.0) ;
+END_FUZZIFY
+
+DEFUZZIFY zmiana
+        TERM redukuj := (1.0, 1.0) (2.0, 0.0) ;
+        TERM utrzymaj :=  (1.0, 0.0) (2.0, 1.0) (3.0, 0.0) ;
+        TERM zwiekszaj :=  (2.0, 0.0) (3.0, 1.0) (4.0, 0.0) ;
+        METHOD : COG;
+        DEFAULT := 1.0;
+        RANGE := (1.0 .. 3.0);
+END_DEFUZZIFY
+
+RULEBLOCK No1
+        ACT : MIN;
+        ACCU : MAX;
+        AND : MIN;
+        RULE 1 : IF (dystans IS krotki) AND (predkosc IS mala) THEN zmiana IS utrzymaj;
+        RULE 2 : IF (dystans IS krotki) AND (predkosc IS duza) THEN zmiana IS redukuj;
+        RULE 3 : IF (dystans IS dlugi) AND (predkosc IS mala) THEN zmiana IS zwiekszaj;
+        RULE 4 : IF (dystans IS dlugi) AND (predkosc IS duza) THEN zmiana IS utrzymaj;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
